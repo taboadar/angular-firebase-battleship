@@ -1,0 +1,22 @@
+.square {
+    height: 50px;
+    width: 50px;
+    background-color: white;
+    border: black solid 1px;
+}
+
+.active {
+    background: lightgreen;
+}
+.no-active {
+    background: lightgray;
+}
+.selected {
+    background: lightsalmon;
+}
+.no-selected {
+    background: lightseagreen;
+}
+.destroyed {
+    background: lightcoral;
+}
