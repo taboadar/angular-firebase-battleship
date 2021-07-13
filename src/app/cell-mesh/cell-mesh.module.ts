@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CellComponent } from './cell/cell.component';
 import { MeshComponent } from './mesh/mesh.component';
+import { ToLetterPipe } from './to-letter.pipe';
 
 
 
@@ -9,6 +10,7 @@ import { MeshComponent } from './mesh/mesh.component';
   declarations: [
     CellComponent,
     MeshComponent,
+    ToLetterPipe
   ],
   imports: [
     CommonModule

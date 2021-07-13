@@ -9,7 +9,7 @@ import { GameboardComponent } from './gameboard/gameboard.component';
 @NgModule({
   declarations: [
     AppComponent,
-    GameboardComponent
+    GameboardComponent,
   ],
   imports: [
     BrowserModule,

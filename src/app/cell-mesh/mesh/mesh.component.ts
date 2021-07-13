@@ -1,6 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { always, range , reverse, } from 'ramda';
-import { noop } from 'rxjs';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { range , reverse, } from 'ramda';
+import { BehaviorSubject } from 'rxjs';
 import { MeshHandler } from '../mesh-handler';
 
 @Component({
@@ -19,16 +19,24 @@ export class MeshComponent implements OnInit {
   set height(num: number) {
     this._height = reverse(range(0, num))
   }
+  @Input() id!: string;
   @Input("show") showPosition = false;
-  @Input("handler") meshHandler: MeshHandler = {
-    classesHandler: (tuple: Number[]) => ({}),
-    mouseenterHandler: (tuple: Number[]) => {},
-    mouseleaveHandler: (tuple: Number[]) => {},
-    clickHandler: (tuple: Number[]) => {},
-  };
+  @Input() classHandler = (tuple:number[]) => ({});
+  @Input() clickHandler = (tuple:number[]) => {};
+  @Input() disabledHandler = (tuple:number[]) => false;
+
+  @Output() meshCurrentCell = new EventEmitter<number[]>();
 
   constructor() { }
-
   ngOnInit(): void {
+    this.meshCurrentCell.emit([])
+  }
+
+  setCurrentCell(tuple: number[]) {
+    this.meshCurrentCell.emit(tuple);
+  }
+
+  turnOffCell() {
+    this.meshCurrentCell.emit([]);
   }
 }

@@ -1,21 +1,11 @@
-<div class="gameboard-metadata">
-    <pre>{{gameState$ | async | json}}</pre>
-    <button (click)="nextStep()">
-        next step
-    </button>
+<div class="gameboard">
+    <app-mesh id="player01" #player1 [width]=5 [height]=5 [show]="true">
+    </app-mesh>
+    <app-mesh id="player02" #player2 [width]=5 [height]=5 [show]="true">
+    </app-mesh>
 </div>
 
-<div class="gameboard">
-<app-mesh
-    #player1
-    [width]=5
-    [height]=5
-    [show]="true">
-</app-mesh>
-<app-mesh
-    #player2    
-    [width]=5
-    [height]=5
-    [show]="true">
-</app-mesh>
+<div class="gameboard-metadata">
+    <pre>{{gameState$ | async | json}}</pre>
+    <button (click)="isVertical=!isVertical">Change to {{isVertical ? 'Vertical': 'Horizontal'}} Orientation</button>
 </div>

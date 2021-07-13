@@ -63,6 +63,6 @@ export class GameStateService {
       currentTurn: gameTurn,
     }
   }
-
+  
   constructor() { }
 }

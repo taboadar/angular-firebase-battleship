@@ -1,17 +1,23 @@
-<div class="mesh">
-    <div class="mesh-row" *ngFor="let column of _width">
-        <div class="mesh-col" *ngFor="let row of _height">
-            <app-cell
-                [id]="'cell:'+row+','+column"
-                [ngClasses]="meshHandler.classesHandler([column, row])"
-                (mouseenter)="meshHandler.mouseenterHandler([column, row])" 
-                (mouseleave)="meshHandler.mouseleaveHandler([column, row])"
-                (click)="meshHandler.clickHandler([column, row])">
-
-                <span *ngIf="showPosition">
-                    <pre>{{column}},{{row}}</pre>
-                </span>
-            </app-cell>
-        </div> 
+<div #myDiv>
+    <span *ngIf="showPosition">
+        Mesh #{{id}}: <br>
+        currentCell: {{meshCurrentCell | async | json}}
+        <!-- <pre>{{ meshState | json }}</pre> -->
+    </span>
+    
+    <div class="mesh" (mouseleave)="turnOffCell()">
+        <div class="mesh-row" *ngFor="let column of _width">
+            <div class="mesh-col" *ngFor="let row of _height">
+                <app-cell
+                    [ngClasses]="classHandler([column, row])"
+                    [attr.disabled]="disabledHandler([column, row])"
+                    (click)="clickHandler([column,row])"
+                    (mouseenter)="setCurrentCell([column, row])">
+                    <span *ngIf="showPosition">
+                        <pre>{{column | toLetter }},{{row}}</pre>
+                    </span>
+                </app-cell>
+            </div> 
+        </div>
     </div>
 </div>
