@@ -21,22 +21,22 @@ export class MeshComponent implements OnInit {
   }
   @Input() id!: string;
   @Input("show") showPosition = false;
-  @Input() classHandler = (tuple:number[]) => ({});
-  @Input() clickHandler = (tuple:number[]) => {};
-  @Input() disabledHandler = (tuple:number[]) => false;
+  @Input() classHandler = (tuple:[number, number]) => ({});
+  @Input() clickHandler = (tuple:[number, number]) => {};
+  @Input() disabledHandler = (tuple:[number, number]) => false;
 
-  @Output() meshCurrentCell = new EventEmitter<number[]>();
+  @Output() meshCurrentCell = new EventEmitter<[number, number]>();
 
   constructor() { }
   ngOnInit(): void {
-    this.meshCurrentCell.emit([])
+    this.meshCurrentCell.emit([-1,-1])
   }
 
-  setCurrentCell(tuple: number[]) {
+  setCurrentCell(tuple: [number, number]) {
     this.meshCurrentCell.emit(tuple);
   }
 
   turnOffCell() {
-    this.meshCurrentCell.emit([]);
+    this.meshCurrentCell.emit([-1,-1]);
   }
 }
