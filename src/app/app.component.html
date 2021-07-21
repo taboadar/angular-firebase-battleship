@@ -1,3 +1,18 @@
+<mat-toolbar color="primary">
+    <button
+        (click)="menuToggle=!menuToggle"
+        *ngIf="currentUser$ | async"
+        mat-icon-button>
+        <mat-icon>menu</mat-icon>
+    </button>
+    <span>Firebase Battleship Game</span>
+</mat-toolbar>
+
 <router-outlet></router-outlet>
 
-<app-gameboard></app-gameboard>
+<!-- <button mat-button-raised color="primary" (click)="doLogin()">Login</button> -->
+
+<!-- <mat-horizontal-stepper>
+    <mat-step [label]="state" *ngFor="let state of gameStates"></mat-step>
+</mat-horizontal-stepper>
+<app-gameboard></app-gameboard> -->

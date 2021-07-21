@@ -1,6 +1,6 @@
 import * as R from 'ramda';
 
-export class Ship {
+export class Ship { 
     private isHorizontal: boolean = false;
     private head: [number, number];
     private body: [number, number][];
@@ -32,11 +32,18 @@ export class Ship {
         return R.any(R.equals(cell), this.body);
     }
 
-    isHitMe(cell: [number, number]) {
+    isHittingMe(cell: [number, number]) {
         return R.any(R.equals(cell), this.body);
     }
 
     intersectionWithShip(ship: Ship) {
         return R.any(cell => ship.contains(cell), this.body);
+    }
+
+    toJSON(): any {
+        return {
+            'name': this.constructor.name,
+            'body': this.body
+        }
     }
 }

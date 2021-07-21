@@ -1,5 +1,5 @@
 import { toPublicName } from '@angular/compiler/src/i18n/serializers/xmb';
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Input, OnInit, ViewChild } from '@angular/core';
 import * as R from 'ramda';
 import { Observable, combineLatest } from 'rxjs';
 import { MeshComponent } from '../cell-mesh/mesh/mesh.component';
@@ -16,8 +16,11 @@ import { GameTurn } from '../logic-battleship/game-turn';
 export class GameboardComponent implements OnInit, AfterViewInit {
   @ViewChild('player1') p1!: MeshComponent;
   @ViewChild('player2') p2!: MeshComponent;
+  @Input() height: number = 5;
+  @Input() width: number = 5;
   isVertical: boolean = true;
   battleState$: Observable<BattleState>
+  
 
   constructor(
     private battleStateService: BattleStateService
@@ -32,25 +35,24 @@ export class GameboardComponent implements OnInit, AfterViewInit {
         switch (state.currentState) {
           case GameTurn.PUT_SHIPS:
             try {
-              const shipFactory = state.factories[0];
-              const ship = shipFactory(currentCell)
-              ship.changeOrienation(this.isVertical);
-              console.log(ship)
+              const ShipFactory = state.factories[0];
+              const currentShip = ShipFactory(currentCell)
+              currentShip.changeOrienation(this.isVertical);
               this.p1.classHandler = (tuple) => ({
                 'active': R.any(s => s.contains(tuple), state.ships),
-                'no-selected': !ship.contains(tuple) && !R.any(s => s.contains(tuple), state.ships),
-                'selected': ship.contains(tuple) && ship.isValidOnMesh(5, 5),
-                'error': ship.contains(tuple) && (!ship.isValidOnMesh(5, 5) || R.any(s => s.intersectionWithShip(ship), state.ships)) 
+                'no-selected': !currentShip.contains(tuple) && !R.any(ship => ship.contains(tuple), state.ships),
+                'selected': currentShip.contains(tuple) && currentShip.isValidOnMesh(this.width, this.height),
+                'error': currentShip.contains(tuple) && (!currentShip.isValidOnMesh(this.width, this.height) || R.any(ship => ship.intersectionWithShip(currentShip), state.ships)) 
               });
               this.p1.clickHandler = (tuple) => {
-                if(!ship.isValidOnMesh(5,5)) { 
+                if(!currentShip.isValidOnMesh(this.width,this.height)) { 
                   alert(`You cannot set this ship here`)
                   return;
-                } else if(R.any(s => s.intersectionWithShip(ship), state.ships)) {
+                } else if(R.any(s => s.intersectionWithShip(currentShip), state.ships)) {
                   alert(`Ships intersection. No procced`);
                   return;
                 }
-                state.ships.push(ship);
+                state.ships.push(currentShip);
                 state.factories = R.tail(state.factories)
                 if(R.isEmpty(state.factories)) {
                   state.currentState = GameTurn.WAITING_ANOTHER_PLAYER;

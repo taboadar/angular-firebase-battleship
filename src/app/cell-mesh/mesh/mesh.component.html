@@ -1,10 +1,4 @@
 <div #myDiv>
-    <span *ngIf="showPosition">
-        Mesh #{{id}}: <br>
-        currentCell: {{meshCurrentCell | async | json}}
-        <!-- <pre>{{ meshState | json }}</pre> -->
-    </span>
-    
     <div class="mesh" (mouseleave)="turnOffCell()">
         <div class="mesh-row" *ngFor="let column of _width">
             <div class="mesh-col" *ngFor="let row of _height">
@@ -14,7 +8,7 @@
                     (click)="clickHandler([column,row])"
                     (mouseenter)="setCurrentCell([column, row])">
                     <span *ngIf="showPosition">
-                        <pre>{{column | toLetter }},{{row}}</pre>
+                        <pre>{{column | toLetter }}{{row}}</pre>
                     </span>
                 </app-cell>
             </div> 

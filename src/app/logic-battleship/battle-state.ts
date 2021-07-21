@@ -20,4 +20,12 @@ export class BattleState {
         this.ships = [];
         this.shots = [];
     }
+
+    toJSON(): any {
+        return {
+            state: this.currentState.toString(),
+            ships: this.ships.map(s => s.toJSON()),
+            shots: this.shots,
+        }
+    }
 }

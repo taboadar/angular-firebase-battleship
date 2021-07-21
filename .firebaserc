@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "taboada-4f230": {
+      "hosting": {
+        "battleship": [
+          "taboada-4f230"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "taboada-4f230"
+  }
+}

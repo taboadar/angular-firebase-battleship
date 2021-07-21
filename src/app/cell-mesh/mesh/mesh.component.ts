@@ -21,7 +21,9 @@ export class MeshComponent implements OnInit {
   }
   @Input() id!: string;
   @Input("show") showPosition = false;
-  @Input() classHandler = (tuple:[number, number]) => ({});
+  @Input() classHandler: (t:[number, number]) => any = (tuple:[number, number]) => {
+    return {'no-selected': true}
+  }
   @Input() clickHandler = (tuple:[number, number]) => {};
   @Input() disabledHandler = (tuple:[number, number]) => false;
 
