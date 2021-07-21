@@ -1,31 +1,38 @@
-import { Component } from '@angular/core';
-import { Observable } from 'rxjs';
-import { FirebaseAuthService } from './custom-firebase/firebase-auth.service';
+import { Component, OnInit } from '@angular/core';
 import { GameTurn } from './logic-battleship/game-turn';
-import firebase from 'firebase';
 import { Router } from '@angular/router';
+import { AngularFireAuth } from '@angular/fire/auth'
+import firebase from 'firebase';
+import { Observable, from } from 'rxjs';
+
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit{
   title = 'battleship';
   menuToggle: boolean = false;
-  currentUser$: Observable<firebase.User | null>;
   gameStates = [GameTurn.PUT_SHIPS, GameTurn.WAITING_ANOTHER_PLAYER, GameTurn.START_GAME, GameTurn.END_GAME];
 
   constructor(
-    private auth: FirebaseAuthService,
+    private auth: AngularFireAuth,
     private router: Router
   ) {
-    this.currentUser$ = this.auth.currentUser$;
+    this.auth.onAuthStateChanged((user) => {
+      debugger
+    })
+  }
+
+  ngOnInit(): void {
   }
 
 
   doLogin() {
-    return this.auth.signInWithGoogle()
+    return this.auth.signInWithPopup(
+      new firebase.auth.GoogleAuthProvider()
+    )
   }
 
   async doLogout() {

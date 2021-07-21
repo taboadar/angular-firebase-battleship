@@ -7,7 +7,7 @@ import { LoginComponent } from './login/login.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
-  { path: 'home', component: HomeComponent, canActivate: [AngularFireAuthGuard]}
+  { path: '', component: HomeComponent, canActivate: [AngularFireAuthGuard]}
 ];
 
 @NgModule({

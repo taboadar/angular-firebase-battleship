@@ -30,13 +30,13 @@ exports.joinToGame = functions.https.onRequest((request, response) => {
     cors(request, response, async () => {
         try {
             const token = request.headers.authorization.replace('Bearer ', '');
-            const { game_id } = request.body;
+            const { game_id } = request.body.data;
             const { uid } = await admin.auth().verifyIdToken(token);
             const userDocRef = db.collection('user').doc(uid);
             const userDocData = (await userDocRef.get()).data();
             const { activeGames, activeGamesRef  } = userDocData;
 
-            if( activeGames > 5 ) { throw Error(406) }
+            if( activeGames > 5 ) { throw 406; }
 
             const gameRef = await (
                 game_id ? Promise.resolve(db.collection('games').doc(game_id))

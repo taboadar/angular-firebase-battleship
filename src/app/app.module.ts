@@ -12,7 +12,7 @@ import { LoginComponent } from './login/login.component';
 
 import { USE_EMULATOR as  USE_FIREBASE_AUTH_EMULATOR} from '@angular/fire/auth';
 import { USE_EMULATOR as USE_FIRESTORE_EMULATOR } from '@angular/fire/firestore';
-import { USE_EMULATOR as USE_FIREBASE_FUNCTIONS_EMULATOR } from '@angular/fire/functions';
+import { USE_EMULATOR as USE_FIREBASE_FUNCTIONS_EMULATOR, ORIGIN, REGION} from '@angular/fire/functions';
 import { environment } from 'src/environments/environment';
 import { CustomFirebaseModule } from './custom-firebase/custom-firebase.module';
 
@@ -43,6 +43,14 @@ import { CustomFirebaseModule } from './custom-firebase/custom-firebase.module';
     {
       provide: USE_FIREBASE_FUNCTIONS_EMULATOR,
       useValue: environment.useEmulators ? ['localhost','5001'] : undefined,
+    },
+    {
+      provide: ORIGIN,
+      useFactory: () => environment.useEmulators ? 'http://localhost:5001' : undefined
+    },
+    {
+      provide: REGION,
+      useValue: 'us-central1'
     }
   ],
   bootstrap: [AppComponent]
