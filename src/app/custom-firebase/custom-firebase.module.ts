@@ -7,7 +7,7 @@ import { AngularFireFunctionsModule} from '@angular/fire/functions';
 import { environment } from 'src/environments/environment';
 
 @NgModule({
-  declarations: [],
+  declarations: [ ],
   imports: [
     CommonModule,
     AngularFireModule.initializeApp(environment.firebaseApp),

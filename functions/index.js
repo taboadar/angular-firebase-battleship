@@ -50,7 +50,7 @@ exports.joinToGame = functions.https.onRequest((request, response) => {
             gameRef.update({
                 players: [...(gameData.players || []), uid]
             })
-            response.send({game_id: gameRef.id});
+            response.json({data: {game_id: gameRef.id }});
         } catch (error) {
             const message = ({
                 406: {
@@ -58,7 +58,7 @@ exports.joinToGame = functions.https.onRequest((request, response) => {
                     message: 'User cannot have more than 5 active games'
                 }
             })[error]
-            response.status(error).send(message);
+            response.status(error).send({data: message});
         }
     })
 })
