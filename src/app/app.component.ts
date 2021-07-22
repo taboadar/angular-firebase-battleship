@@ -14,10 +14,15 @@ export class AppComponent implements OnInit{
   constructor(
     public auth: AngularFireAuth,
     private router: Router,
+    private ngZone: NgZone,
   ) {
   }
 
   ngOnInit(): void {
+  }
+
+  doLogout() {
+    this.auth.signOut().then(() => this.ngZone.run(() => this.router.navigate(['login'])))
   }
 
 }

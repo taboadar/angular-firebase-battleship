@@ -16,6 +16,7 @@ import { LoginComponent } from './login/login.component';
 import { GameRoomComponent } from './game-room/game-room.component';
 import { HomeComponent } from './home/home.component';
 import { CustomSidenavComponent } from './custom-sidenav/custom-sidenav.component';
+import { GameboardComponent } from './gameboard/gameboard.component'
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { CustomSidenavComponent } from './custom-sidenav/custom-sidenav.componen
     GameRoomComponent,
     HomeComponent,
     CustomSidenavComponent,
+    GameboardComponent
   ],
   imports: [
     BrowserModule,

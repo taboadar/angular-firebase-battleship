@@ -40,7 +40,7 @@ exports.joinToGame = functions.https.onRequest((request, response) => {
 
             const gameRef = await (
                 game_id ? Promise.resolve(db.collection('games').doc(game_id))
-                    : db.collection('game').add({})
+                    : db.collection('games').add({})
             );
             const gameData = (await gameRef.get()).data();
             userDocRef.update({
@@ -48,6 +48,7 @@ exports.joinToGame = functions.https.onRequest((request, response) => {
                 activeGamesRef: [...activeGamesRef, gameRef]
             });
             gameRef.update({
+                state: 'WAITING_FOR_PLAYERS',
                 players: [...(gameData.players || []), uid]
             })
             response.json({data: {game_id: gameRef.id }});
