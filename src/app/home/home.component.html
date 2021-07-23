@@ -33,6 +33,18 @@
 </div>
 
 
-<div class="" *ngFor="let game of activeGames$ | async">
+<!-- <div class="" *ngFor="let game of activeGames$ | async">
+    <a [routerLink]="[ '/game', game.game_id ]">game.game_id</a>
     <pre>{{game | json}}</pre>
-</div>
+</div> -->
+
+<table mat-table #table [dataSource]="activeGames$ | async">
+    <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef> Active Games </th>
+        <td mat-cell *matCellDef="let row">
+            <a [routerLink]="[ '/game', row.id ]">{{row.id}}</a>
+        </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="['id']"></tr>
+    <tr mat-row *matRowDef="let row; columns: ['id'];"></tr>
+</table>

@@ -4,6 +4,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireFunctions } from '@angular/fire/functions';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { flatMap, map, mergeMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-home',
@@ -12,6 +13,7 @@ import { Observable } from 'rxjs';
 })
 export class HomeComponent implements OnInit {
   activeGames$: Observable<any>;
+  
 
   constructor(
     public auth: AngularFireAuth,
@@ -20,7 +22,19 @@ export class HomeComponent implements OnInit {
     private router: Router,
     private ngZone:  NgZone,
   ) { 
-    this.activeGames$ = this.firestore.collection('games').valueChanges();
+    this.activeGames$ = this.auth.user.pipe(
+      mergeMap((user) => {
+        return this.firestore.collection('games', 
+          (collection) => collection.where('players','array-contains',user?.uid)
+        ).snapshotChanges()
+      }),
+      map(snapshots  => {
+        return snapshots.map(docSnapshot => ({
+          id: docSnapshot.payload.doc.id,
+          data: docSnapshot.payload.doc.data()
+        }))
+      })
+    )
   }
 
   ngOnInit(): void {
@@ -30,7 +44,7 @@ export class HomeComponent implements OnInit {
   joinGame(game_id: string) { 
     this.functions.httpsCallable('joinToGame')({game_id})
       .toPromise()
-      .then(data => this.ngZone.run(() => this.router.navigateByUrl(`/game/${game_id}`)))
+      .then(() => this.ngZone.run(() => this.router.navigateByUrl(`/game/${game_id}`)))
   }
 
   createNewGame() {
