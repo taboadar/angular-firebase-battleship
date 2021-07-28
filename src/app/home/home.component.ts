@@ -2,6 +2,7 @@ import { Component, NgZone, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireFunctions } from '@angular/fire/functions';
+import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { flatMap, map, mergeMap } from 'rxjs/operators';
@@ -53,6 +54,12 @@ export class HomeComponent implements OnInit {
       .then(data => {
         this.ngZone.run(() => this.router.navigateByUrl(`/game/${data.game_id}`))
       })
+  }
+
+  onSubmit(form: NgForm){
+    if(form.valid) {
+      this.joinGame(form.value.gameId)
+    }
   }
 
 }

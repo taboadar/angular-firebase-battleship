@@ -15,6 +15,18 @@ exports.helloWorld = functions.https.onRequest((request, response) => {
     })
 });
 
+exports.beforeUpdateGame = functions.firestore.document('games/{docId}').onUpdate((change, context) => {
+    const oldValues = change.before.data();
+    const newValues = change.after.data();
+    switch(newValues.state) {
+        case 'WAITING_FOR_PLAYERS':
+            return change.after.ref.set({
+                player1: newValues.players[Math.floor(Math.random())]
+            })
+            break;
+    }
+})
+
 exports.createPlayerInfo = functions.auth.user().onCreate((user) => {
     return db.collection('user').doc(user.uid).create({
         wins: 0,

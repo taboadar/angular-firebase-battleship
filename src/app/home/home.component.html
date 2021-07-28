@@ -14,15 +14,18 @@
     </mat-card>
 
     <mat-card>
-        <form action="">
+        <form #f="ngForm" (ngSubmit)="onSubmit(f)" novalidate>
             <mat-card-header>
                 <mat-card-title>Join A Game</mat-card-title>
                 <mat-card-subtitle></mat-card-subtitle>
             </mat-card-header>
             <mat-card-content>
                 <mat-form-field>
-                    <input matInput placeholder="Game ID" value="">
+                    <input name="gameId" ngModel required #gameId="ngModel" matInput placeholder="label" value="value">
                 </mat-form-field>
+                <!-- <mat-form-field>
+                    <input matInput required #gameId ngModel placeholder="Game ID" value="">
+                </mat-form-field> -->
             </mat-card-content>
             <mat-card-actions>
                 <button mat-raised-button color="primary">Go To Game</button>
@@ -31,12 +34,6 @@
 
     </mat-card>
 </div>
-
-
-<!-- <div class="" *ngFor="let game of activeGames$ | async">
-    <a [routerLink]="[ '/game', game.game_id ]">game.game_id</a>
-    <pre>{{game | json}}</pre>
-</div> -->
 
 <table mat-table #table [dataSource]="activeGames$ | async">
     <ng-container matColumnDef="id">

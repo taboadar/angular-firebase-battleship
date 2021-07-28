@@ -1,6 +1,7 @@
 <p>game-room works!</p>
+<p><span>Now you are in game # {{gameId$ | async }}</span></p>
 <pre>{{currentGame$ | async | json}}</pre>
 
-<!-- <app-gameboard 
+<app-gameboard 
     [height]=5 
-    [width]=5></app-gameboard> -->
+    [width]=5></app-gameboard>

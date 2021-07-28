@@ -17,6 +17,7 @@ import { GameRoomComponent } from './game-room/game-room.component';
 import { HomeComponent } from './home/home.component';
 import { CustomSidenavComponent } from './custom-sidenav/custom-sidenav.component';
 import { GameboardComponent } from './gameboard/gameboard.component'
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { GameboardComponent } from './gameboard/gameboard.component'
     AppRoutingModule,
     CellMeshModule,
     BrowserAnimationsModule,
+    FormsModule,
     MaterialImportsModule,
     CustomFirebaseModule,
   ],
