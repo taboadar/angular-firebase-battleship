@@ -43,13 +43,13 @@ export class HomeComponent implements OnInit {
   }
 
   joinGame(game_id: string) { 
-    this.functions.httpsCallable('joinToGame')({game_id})
+    this.functions.httpsCallable('joinGame')({game_id})
       .toPromise()
       .then(() => this.ngZone.run(() => this.router.navigateByUrl(`/game/${game_id}`)))
   }
 
   createNewGame() {
-    this.functions.httpsCallable('joinToGame')({})
+    this.functions.httpsCallable('createGame')({})
       .toPromise()
       .then(data => {
         this.ngZone.run(() => this.router.navigateByUrl(`/game/${data.game_id}`))

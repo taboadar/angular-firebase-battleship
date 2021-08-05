@@ -9,9 +9,16 @@
 </mat-toolbar>
 <mat-drawer-container class="example-container" autosize>
     <mat-drawer #drawer class="example-sidenav" mode="side">
-        <button mat-raised-button color="accent" (click)="doLogout();drawer.toggle()">LogOut</button>
-        <div *ngIf="auth.user | async as user" >
-            <pre>{{ user.uid }}</pre>
+        <div *ngIf="auth.user | async as user">
+            <mat-list>
+                <mat-list-item><img [src]="user.photoURL" alt="" srcset=""></mat-list-item>
+                <mat-list-item>{{ user.displayName }}</mat-list-item>
+                <mat-divider></mat-divider>
+                <div class="" *ngIf="playerInfo$ | async as info">
+                    <mat-list-item> <pre>Wins: {{info.wins}}</pre></mat-list-item>
+                    <mat-list-item> <pre>Defeats: {{info.defeats}} </pre></mat-list-item>
+                </div>
+            </mat-list>
         </div>
     </mat-drawer>
     <div class="example-sidenav-content">

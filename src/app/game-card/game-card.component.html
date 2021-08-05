@@ -1,0 +1,9 @@
+<mat-card>
+    <mat-card-header>
+        <mat-card-title>{{user.displayName}}'s Gameboard</mat-card-title>
+        <mat-card-subtitle><pre>GameID:{{user.uid}}</pre></mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+        <app-mesh [width]=5 [height]=5 [show]=true></app-mesh>
+    </mat-card-content>
+</mat-card>

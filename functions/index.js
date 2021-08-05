@@ -4,74 +4,79 @@ const { user } = require("firebase-functions/lib/providers/auth");
 const cors = require('cors')({ origin: true });
 admin.initializeApp();
 const db = admin.firestore();
-const R = require('ramda');
 // // Create and Deploy Your First Cloud Functions
 // // https://firebase.google.com/docs/functions/write-firebase-functions
 //
-exports.helloWorld = functions.https.onRequest((request, response) => {
-    cors(request, response, () => {
-        functions.logger.info("Hello logs!", { structuredData: true })
-        response.send("Hello from Firebase!")
-    })
-});
 
-exports.beforeUpdateGame = functions.firestore.document('games/{docId}').onUpdate((change, context) => {
-    const oldValues = change.before.data();
-    const newValues = change.after.data();
-    switch(newValues.state) {
-        case 'WAITING_FOR_PLAYERS':
-            return change.after.ref.set({
-                player1: newValues.players[Math.floor(Math.random())]
-            })
-            break;
-    }
-})
+async function getTokenFromHeader(request) {
+    const token = request.headers.authorization.replace('Bearer ', '');
+    if(!token) { throw 401 }
+    const decodedToken = await admin.auth().verifyIdToken(token);
+    if (!decodedToken) { throw 404 }
+    return decodedToken;
+}
 
 exports.createPlayerInfo = functions.auth.user().onCreate((user) => {
-    return db.collection('user').doc(user.uid).create({
+    return db.collection('users').doc(user.uid).create({
         wins: 0,
         defeats: 0,
         ties: 0,
         activeGames: 0,
-        activeGamesRef: [],
+        activeGamesRefs: [],
         archivedGames: [],
     });
 });
 
-exports.joinToGame = functions.https.onRequest((request, response) => {
-    cors(request, response, async () => {
+exports.createGame = functions.https.onRequest((req, res) => {
+    cors(req, res, async () => {
         try {
-            const token = request.headers.authorization.replace('Bearer ', '');
-            const { game_id } = request.body.data;
-            const { uid } = await admin.auth().verifyIdToken(token);
-            const userDocRef = db.collection('user').doc(uid);
-            const userDocData = (await userDocRef.get()).data();
-            const { activeGames, activeGamesRef  } = userDocData;
-
-            if( activeGames > 5 ) { throw 406; }
-
-            const gameRef = await (
-                game_id ? Promise.resolve(db.collection('games').doc(game_id))
-                    : db.collection('games').add({})
-            );
-            const gameData = (await gameRef.get()).data();
-            userDocRef.update({
-                activeGames : activeGames + 1,
-                activeGamesRef: [...activeGamesRef, gameRef]
+            const { uid } = await getTokenFromHeader(req); 
+            const userDocRef = await db.collection('users').doc(uid).get();
+            const userData = userDocRef.data();
+            console.log({userData})
+            const gameDoc = await db.collection('games').add({
+                state: 'WAITING_FOR_PLAYER_2',
+                p1: uid,
+                players: [ uid ]
             });
-            gameRef.update({
-                state: 'WAITING_FOR_PLAYERS',
-                players: [...(gameData.players || []), uid]
-            })
-            response.json({data: {game_id: gameRef.id }});
+            await userDocRef.ref.set({
+                activeGames: userData.activeGames + 1,
+                activeGamesRefs: [...userData.activeGamesRefs, gameDoc.id],
+            }, { merge: true });
+            res.json({ data: { game_id: gameDoc.id } });
         } catch (error) {
-            const message = ({
-                406: {
-                    status: 'NOT_ACCEPTABLE',
-                    message: 'User cannot have more than 5 active games'
-                }
-            })[error]
-            response.status(error).send({data: message});
+            res.status(error).send({ data: error });
         }
     })
-})
+});
+
+exports.joinGame = functions.https.onRequest((req, res) => {
+    cors(req, res, async () => {
+        try {
+            const { uid } = await getTokenFromHeader(req);
+            const { game_id } = req.body.data;
+            if (!game_id) { throw 404; }
+            const userDoc = await db.collection('users').doc(uid).get();
+            const gameDoc = await db.collection('games').doc(game_id).get();
+            const userData = userDoc.data();
+            const gameData = gameDoc.data();
+            const players =  [...gameData.players, uid];
+            gameDoc.ref.set({
+                state: 'WAITING_FOR_SHIPS',
+                p2: uid,
+                players
+            }, {merge: true});
+            await Promise.all(players.map(async (player) => {
+                await gameDoc.ref.collection('shots').doc(player).create({});
+                await gameDoc.ref.collection('ships').doc(player).create({});
+            }));
+            userDoc.ref.set({
+                activeGames: userData.activeGames + 1,
+                activeGamesRefs: [...userData.activeGamesRefs, gameDoc.id ]
+            }, { merge : true })
+            res.json({data: { status: 'ok' }});
+        } catch (error) {
+            res.status(error).send({ data: error });
+        }
+    });
+});

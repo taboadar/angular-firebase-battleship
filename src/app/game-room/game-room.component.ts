@@ -14,15 +14,17 @@ import { BattleStateService } from '../logic-battleship/battle-state.service';
 export class GameRoomComponent {
   currentGame$: Observable<any>;
   gameId$: Observable<string>;
+  player$: Observable<any>;
 
   constructor(
-    private auth: AngularFireAuth,
+    public auth: AngularFireAuth,
     private activedRoute: ActivatedRoute,
     private firestore: AngularFirestore,
     private battleStateService: BattleStateService,
     private activeRoute: ActivatedRoute
   ) { 
     this.gameId$ = this.activeRoute.params.pipe(map((params)=> params.id))
+    this.player$ = this.auth.user.pipe(mergeMap((user) => this.firestore.collection('users').doc(user?.uid).valueChanges()))
     this.currentGame$ = combineLatest([this.auth.user, this.activedRoute.params]).pipe(
       mergeMap(([user, params]) => {
         return this.firestore.collection('games').doc(params.id).valueChanges();

@@ -10,7 +10,9 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatInputModule } from '@angular/material/input';
-import { MatTableModule } from '@angular/material/table'
+import { MatTableModule } from '@angular/material/table';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatListModule } from '@angular/material/list'
 
 @NgModule({
   declarations: [],
@@ -29,6 +31,9 @@ import { MatTableModule } from '@angular/material/table'
     MatDividerModule,
     MatInputModule,
     MatTableModule,
+    MatRadioModule,
+    MatListModule,
+    
   ]
 })
 export class MaterialImportsModule { }
