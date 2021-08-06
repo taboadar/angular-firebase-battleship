@@ -32,14 +32,5 @@ export class AppComponent implements OnInit{
   ngOnInit(): void {
     this.gameStatus$.subscribe(console.log)
   }
-
-  doLogout() {
-  }
-
-  createGame() {
-    console.log(this.fns)
-    // console.log(this.functions)
-    // this.functions.httpsCallable('createGame')({}).toPromise();
-  }
-
+ 
 }

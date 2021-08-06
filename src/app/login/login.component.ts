@@ -4,6 +4,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import firebase from 'firebase';
 import { Observable, of } from 'rxjs';
 import { mergeMap } from 'rxjs/operators'
+import { HttpRequestsService } from '../http-requests.service';
 
 @Component({
   selector: 'app-login',
@@ -12,11 +13,10 @@ import { mergeMap } from 'rxjs/operators'
 })
 export class LoginComponent implements OnInit {
   gameStatus$: Observable<any>;
-  @Input() createGame!: () => void;
-  @Input() joinGame!: () => void;
 
   constructor(
     public auth: AngularFireAuth,
+    public httpReq: HttpRequestsService,
     public fdb: AngularFirestore,
   ) {
 
