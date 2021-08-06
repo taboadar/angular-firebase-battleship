@@ -1,4 +1,15 @@
-.login-container {
+.status-container {
     display: flex;
+    flex-direction: row;
     justify-content: space-around;
 }
+
+.game-buttons {
+    display: flex;
+    justify-content: space-around;
+    align-items: baseline;
+}
+
+    .game-buttons > div {
+        padding: 20px;
+    }

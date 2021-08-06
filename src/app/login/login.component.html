@@ -1,13 +1,57 @@
-<div class="login-container">
+<div *ngIf="auth.user | async as user; then peopleCard else signInCard"></div>
+
+<ng-template #signInCard>
     <mat-card>
         <mat-card-header>
-            <mat-card-title>Sign In</mat-card-title>
-            <mat-card-subtitle>Login with the existing methods</mat-card-subtitle>
+            <mat-card-title>Log In</mat-card-title>
+            <mat-card-subtitle></mat-card-subtitle>
         </mat-card-header>
         <mat-card-content>
-            <button mat-raised-button color="accent" (click)="doLogin()">
-                <span>Sign In With Google</span>
-            </button>
+            <button mat-raised-button color="primary" (click)="googleSignIn()">SignIn With Google</button>
         </mat-card-content>
     </mat-card>
-</div>
+</ng-template>
+
+<ng-template #peopleCard>
+    <mat-card *ngIf="auth.user | async as user">
+        <mat-card-header>
+            <img mat-card-avatar src="{{user.photoURL}}" [alt]="user.displayName" >
+            <mat-card-title>{{user.displayName}}</mat-card-title>
+            <mat-card-subtitle>{{user.email}}</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+            <div class="status-container" *ngIf="gameStatus$ | async as status">
+                <div class="wins">
+                    <h2>Wins: {{status.wins}}</h2>  
+                </div>
+                <div class="ties">
+                    <h2>Ties: {{status.ties}}</h2>
+                </div>
+                <div class="defeats">
+                    <h2> Defeats: {{status.defeats}}</h2>
+                </div>
+            </div>
+            <mat-divider></mat-divider>
+            <div class="game-buttons">
+                <div class="">
+                    <button mat-raised-button color="primary" (click)="createGame()">Create Game</button>    
+                </div>
+                <div class="">or</div>
+                <div    >
+                    <!-- <form action=""> -->
+                        <span>  
+                            <button mat-raised-button color="warn">Join Game</button>   
+                        </span>
+                        <mat-form-field>
+                            <input matInput placeholder="gameid" value="">
+                        </mat-form-field>
+                    <!-- </form> -->
+                </div>
+            </div>
+        </mat-card-content>
+        <mat-card-actions>
+            <button mat-raised-button color="error" (click)="signOut()">Sign Out</button>   
+        </mat-card-actions>
+    </mat-card>
+</ng-template>
+

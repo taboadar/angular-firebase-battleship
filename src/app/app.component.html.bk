@@ -1,0 +1,28 @@
+<mat-toolbar color="primary">
+    <mat-toolbar-row>
+        <button mat-icon-button *ngIf="auth.user | async">
+            <mat-icon (click)="drawer.toggle()">menu</mat-icon>
+        </button>
+        <span>Firebase Battle Game</span>
+        <span class="example-spacer"></span>
+    </mat-toolbar-row>
+</mat-toolbar>
+<mat-drawer-container class="example-container" autosize>
+    <mat-drawer #drawer class="example-sidenav" mode="side">
+        <div *ngIf="auth.user | async as user">
+            <mat-list>
+                <mat-list-item><img [src]="user.photoURL" alt="" srcset=""></mat-list-item>
+                <mat-list-item>{{ user.displayName }}</mat-list-item>
+                <mat-divider></mat-divider>
+                <div class="" *ngIf="playerInfo$ | async as info">
+                    <mat-list-item> <pre>Wins: {{info.wins}}</pre></mat-list-item>
+                    <mat-list-item> <pre>Defeats: {{info.defeats}} </pre></mat-list-item>
+                </div>
+            </mat-list>
+        </div>
+    </mat-drawer>
+    <div class="example-sidenav-content">
+        <router-outlet></router-outlet>
+    </div>
+</mat-drawer-container>
+

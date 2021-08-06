@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
-import { AngularFireFunctionsModule} from '@angular/fire/functions';
+import { AngularFireFunctions, AngularFireFunctionsModule} from '@angular/fire/functions';
 import { environment } from 'src/environments/environment';
 
 @NgModule({
@@ -13,7 +13,7 @@ import { environment } from 'src/environments/environment';
     AngularFireModule.initializeApp(environment.firebaseApp),
     AngularFireAuthModule,
     AngularFirestoreModule,
-    AngularFireFunctionsModule
+    AngularFireFunctionsModule,
   ],
   exports: [
   ],

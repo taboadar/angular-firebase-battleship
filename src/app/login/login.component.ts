@@ -1,7 +1,9 @@
-import { Component, NgZone, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { Router } from '@angular/router';
+import { AngularFirestore } from '@angular/fire/firestore';
 import firebase from 'firebase';
+import { Observable, of } from 'rxjs';
+import { mergeMap } from 'rxjs/operators'
 
 @Component({
   selector: 'app-login',
@@ -9,21 +11,32 @@ import firebase from 'firebase';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
+  gameStatus$: Observable<any>;
+  @Input() createGame!: () => void;
+  @Input() joinGame!: () => void;
 
   constructor(
-    private auth: AngularFireAuth,
-    private router: Router,
-    private ngZone: NgZone
-  ) { }
+    public auth: AngularFireAuth,
+    public fdb: AngularFirestore,
+  ) {
+
+    this.gameStatus$ = this.auth.user.pipe(
+      mergeMap(user => {
+        if(!user) { return of({}); }
+        return this.fdb.collection('users').doc(user?.uid).valueChanges()
+      })
+    )
+  }
 
   ngOnInit(): void {
+    
   }
 
-  async doLogin() {
-    await this.auth.signInWithPopup(
-      new firebase.auth.GoogleAuthProvider()
-    );
-    this.ngZone.run(() => this.router.navigateByUrl(''))
+  googleSignIn() {
+    this.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider())
   }
 
+  signOut() {
+    this.auth.signOut();
+  }
 }

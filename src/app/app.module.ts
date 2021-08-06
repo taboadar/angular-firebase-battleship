@@ -1,39 +1,41 @@
-import { NgModule } from '@angular/core';
+import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { CellMeshModule } from './cell-mesh/cell-mesh.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialImportsModule } from './material-imports/material-imports.module';
 
-import { USE_EMULATOR as  USE_FIREBASE_AUTH_EMULATOR, SETTINGS} from '@angular/fire/auth';
-import { USE_EMULATOR as USE_FIRESTORE_EMULATOR } from '@angular/fire/firestore';
-import { USE_EMULATOR as USE_FIREBASE_FUNCTIONS_EMULATOR, ORIGIN, REGION} from '@angular/fire/functions';
+import { USE_EMULATOR as USE_FIREBASE_AUTH_EMULATOR, SETTINGS, AngularFireAuth } from '@angular/fire/auth';
+import { AngularFirestore, USE_EMULATOR as USE_FIRESTORE_EMULATOR } from '@angular/fire/firestore';
+import { USE_EMULATOR as USE_FIREBASE_FUNCTIONS_EMULATOR, ORIGIN, REGION } from '@angular/fire/functions';
 import { environment } from 'src/environments/environment';
 import { CustomFirebaseModule } from './custom-firebase/custom-firebase.module';
-import { LoginComponent } from './login/login.component';
-import { GameRoomComponent } from './game-room/game-room.component';
-import { HomeComponent } from './home/home.component';
-import { GameboardComponent } from './gameboard/gameboard.component'
 import { FormsModule } from '@angular/forms';
-import { GameCardComponent } from './game-card/game-card.component';
-import { ShipSelectorComponent } from './ship-selector/ship-selector.component';
+import { LoginComponent } from './login/login.component';
+import { GameboardComponent } from './gameboard/gameboard.component';
+
+
+export function initializeApp1(afa: AngularFireAuth): any {
+  // https://stackoverflow.com/questions/65025005/angularfireauth-emulator-login-is-lost-on-page-reload
+  return () => {
+    return new Promise(resolve => {
+      // fdb.firestore.useEmulator('http://localhost',8080);  
+      afa.useEmulator(`http://${location.hostname}:9099/`);
+      setTimeout(() => resolve({}), 300 ); // delay Angular initialization by 100ms
+    });
+  };
+}
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    GameRoomComponent,
-    HomeComponent,
     GameboardComponent,
-    GameCardComponent,
-    ShipSelectorComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    CellMeshModule,
     BrowserAnimationsModule,
     FormsModule,
     MaterialImportsModule,
@@ -42,15 +44,15 @@ import { ShipSelectorComponent } from './ship-selector/ship-selector.component';
   providers: [
     {
       provide: USE_FIREBASE_AUTH_EMULATOR,
-      useValue: environment.useEmulators ? ['localhost','9099'] : null,
+      useValue: environment.useEmulators ? ['localhost', '9099'] : null,
     },
     {
       provide: USE_FIRESTORE_EMULATOR,
-      useValue: environment.useEmulators ? ['localhost','8080'] : undefined
+      useValue: environment.useEmulators ? ['localhost', '8080'] : undefined
     },
     {
       provide: USE_FIREBASE_FUNCTIONS_EMULATOR,
-      useValue: environment.useEmulators ? ['localhost','5001'] : undefined,
+      useValue: environment.useEmulators ? ['localhost', '5001'] : undefined,
     },
     {
       provide: ORIGIN,
@@ -59,6 +61,14 @@ import { ShipSelectorComponent } from './ship-selector/ship-selector.component';
     {
       provide: REGION,
       useValue: 'us-central1'
+    },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initializeApp1,
+      // for some reason this dependency is necessary for this solution to work.
+      // Maybe in order to trigger the constructor *before* waiting 100ms?
+      deps: [AngularFireAuth],
+      multi: true
     }
   ],
   bootstrap: [AppComponent]

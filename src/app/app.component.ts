@@ -1,9 +1,9 @@
 import { Component, NgZone, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/auth'
 import { AngularFirestore } from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
-import { mergeMap } from 'rxjs/operators';
+import { AngularFireFunctions } from '@angular/fire/functions';
+import { Observable, of } from 'rxjs';
+import { mergeMap } from 'rxjs/internal/operators/mergeMap';
 
 @Component({
   selector: 'app-root',
@@ -13,23 +13,33 @@ import { mergeMap } from 'rxjs/operators';
 export class AppComponent implements OnInit{
   title = 'battleship';
   menuToggle: boolean = false;
-  playerInfo$: Observable<any>;
+  gameStatus$: Observable<any>;
 
 
   constructor(
     public auth: AngularFireAuth,
     private firestore: AngularFirestore,
-    private router: Router,
-    private ngZone: NgZone,
+    private fns: AngularFireFunctions,
   ) {
-    this.playerInfo$ = this.auth.user.pipe(mergeMap(user => this.firestore.collection('users').doc(user!.uid).valueChanges()))
+    this.gameStatus$ = this.auth.user.pipe(
+      mergeMap(user => {
+        if(!user) { return of({}); }
+        return this.firestore.collection('users').doc(user?.uid).valueChanges();
+      })
+    )
   }
 
   ngOnInit(): void {
+    this.gameStatus$.subscribe(console.log)
   }
 
   doLogout() {
-    this.auth.signOut().then(() => this.ngZone.run(() => this.router.navigate(['login'])))
+  }
+
+  createGame() {
+    console.log(this.fns)
+    // console.log(this.functions)
+    // this.functions.httpsCallable('createGame')({}).toPromise();
   }
 
 }
