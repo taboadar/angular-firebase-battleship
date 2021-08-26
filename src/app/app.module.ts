@@ -15,6 +15,11 @@ import { CustomFirebaseModule } from './custom-firebase/custom-firebase.module';
 import { FormsModule } from '@angular/forms';
 import { LoginComponent } from './login/login.component';
 import { GameboardComponent } from './gameboard/gameboard.component';
+import { CellMeshComponent } from './cell-mesh/cell-mesh.component';
+import { ShotMeshComponent } from './shot-mesh/shot-mesh.component';
+import { SelectShipMeshComponent } from './select-ship-mesh/select-ship-mesh.component';
+import { ShipMeshComponent } from './ship-mesh/ship-mesh.component';
+import { CellSpanComponent } from './cell-span/cell-span.component';
 
 
 export function initializeApp1(afa: AngularFireAuth): any {
@@ -34,6 +39,11 @@ export function initializeApp1(afa: AngularFireAuth): any {
     AppComponent,
     LoginComponent,
     GameboardComponent,
+    CellMeshComponent,
+    ShotMeshComponent,
+    SelectShipMeshComponent,
+    ShipMeshComponent,
+    CellSpanComponent,
   ],
   imports: [
     BrowserModule,

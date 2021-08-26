@@ -27,13 +27,33 @@ exports.createPlayerInfo = functions.auth.user().onCreate((user) => {
     });
 });
 
+exports.gameStateHandler = functions.firestore.document('games/{gameId}').onUpdate((change, ctx) => {
+    const newValue = change.after.data();
+    const oldData = change.before.data();
+    const { state, players } = newValue;
+    switch (state) {
+        case 'WAITING_FOR_SHIPS':
+            const ships = players.map(x => newValue[x]).filter(x => x);
+            if(ships.length == 2 ) {
+                console.log(ships)
+                return change.after.ref.set({
+                    state: 'PLAYER_1_TURN'
+                }, { merge: true })
+            }
+            break;
+        case 'PLAYER_1_TURN':
+        case 'PLAYER_2_TURN':
+            break;
+    }
+    return null;
+});
+
 exports.createGame = functions.https.onRequest((req, res) => {
     cors(req, res, async () => {
         try {
             const { uid } = await getTokenFromHeader(req); 
             const userDocRef = await db.collection('users').doc(uid).get();
             const userData = userDocRef.data();
-            console.log({userData})
             const gameDoc = await db.collection('games').add({
                 state: 'WAITING_FOR_PLAYER_2',
                 p1: uid,
@@ -54,10 +74,10 @@ exports.joinGame = functions.https.onRequest((req, res) => {
     cors(req, res, async () => {
         try {
             const { uid } = await getTokenFromHeader(req);
-            const { game_id } = req.body.data;
-            if (!game_id) { throw 404; }
+            const { gameid } = req.body.data;
+            if (!gameid) { throw 404; }
             const userDoc = await db.collection('users').doc(uid).get();
-            const gameDoc = await db.collection('games').doc(game_id).get();
+            const gameDoc = await db.collection('games').doc(gameid).get();
             const userData = userDoc.data();
             const gameData = gameDoc.data();
             const players =  [...gameData.players, uid];

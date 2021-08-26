@@ -10,23 +10,22 @@ import { ShipService } from '../ship.service';
   styles: []
 })
 export class SelectShipMeshComponent implements  OnChanges, AfterViewInit {
-  private ships: Ship[] = [
+  @Input() isVertical!: boolean;
+  @Output() shipsComplete = new EventEmitter<Ship[]>();
+  @ViewChild(CellMeshComponent) mesh!: CellMeshComponent;
+  private shipFactory: Ship[] = [
     new Ship('Destroyer',4), 
     new Ship('Submarine', 3), 
     new Ship('Battleship',2),
     new Ship('Battleship2',2),
   ]
-  ship = this.ships[0];
-  @ViewChild(CellMeshComponent) mesh!: CellMeshComponent;
-  @Input() isVertical!: boolean;
-  @Output() shipsComplete = new EventEmitter<string>();
+  ship = this.shipFactory[0];
+  private shipService = new ShipService();
 
   constructor(
-    private shipService: ShipService,
   ) { }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log(this.shipService.ships)
     this.mesh.ngClassHandler = this.ngClassHandler.bind(this);
   }
 
@@ -52,7 +51,7 @@ export class SelectShipMeshComponent implements  OnChanges, AfterViewInit {
   }
 
   clickHandler(x: number, y: number) {
-    const shipsTail = R.tail(this.ships);
+    const shipsTail = R.tail(this.shipFactory);
     if(R.any(s => this.ship.containShip(s), this.shipService.ships)) {
       alert('You can not put the ship here');
       return;
@@ -62,15 +61,15 @@ export class SelectShipMeshComponent implements  OnChanges, AfterViewInit {
     }
     if(R.isEmpty(shipsTail)) {
       console.log(this.shipService.ships)
-      this.shipsComplete.emit('COMPLETE');
+      this.shipsComplete.emit(this.shipService.ships);
       return;
     }
     if(!this.ship?.isValidOnMesh(5,5)) {
       alert('Ship is not valid')
       return;
     }
-    this.ships = shipsTail;
-    this.ship = this.ships[0];
+    this.shipFactory = shipsTail;
+    this.ship = this.shipFactory[0];
   }
 
 }

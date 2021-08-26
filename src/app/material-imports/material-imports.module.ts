@@ -12,7 +12,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatInputModule } from '@angular/material/input';
 import { MatTableModule } from '@angular/material/table';
 import { MatRadioModule } from '@angular/material/radio';
-import { MatListModule } from '@angular/material/list'
+import { MatListModule } from '@angular/material/list';
 
 @NgModule({
   declarations: [],

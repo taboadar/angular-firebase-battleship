@@ -13,6 +13,7 @@ import { HttpRequestsService } from '../http-requests.service';
 })
 export class LoginComponent implements OnInit {
   gameStatus$: Observable<any>;
+  joinModel = { gameid: "" }
 
   constructor(
     public auth: AngularFireAuth,
@@ -39,4 +40,6 @@ export class LoginComponent implements OnInit {
   signOut() {
     this.auth.signOut();
   }
+
+  
 }

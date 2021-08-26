@@ -11,7 +11,7 @@ import * as R from 'ramda';
             [ngClass]="ngClassHandler(row,col)"
             (click)="clickHandler(row,col)"
             (mouseenter)="onmouseoverHandler(row,col)">
-          <span><pre>{{row}},{{col}}</pre></span>
+          <span><pre>{{ showText(row,col) }}</pre></span>
         </div>
       </div>
     </div>
@@ -20,15 +20,23 @@ import * as R from 'ramda';
   .mesh {
     display: flex;
   }
+  .row-mesh {
+    flex: 1 0 auto;
+    height: auto;
+  };
+  .row-mesh:before {
+    content: '';
+    display: block;
+    padding-top: 100%;
+  };
   .cell {
-    height: 50px;
-    width: 50px;
     background-color: white;
     border: black solid 1px;
   }
   .selected { background: lightgreen};
   .error { background: lightcoral};
   .ship { background: lightgrey };
+  .missingShot { background: orange}
   `]
 })
 export class CellMeshComponent implements OnInit {
@@ -38,6 +46,7 @@ export class CellMeshComponent implements OnInit {
   @Input() ngClassHandler = (x:number, y:number) => ({})
   @Input() clickHandler = (x:number, y:number) => {}
   @Input() onmouseoverHandler = (x:number, y: number) => {}
+  @Input() showText = (x: number, y: number) => `${x},${y}`
 
 
   constructor() { }

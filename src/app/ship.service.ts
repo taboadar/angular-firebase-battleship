@@ -6,6 +6,10 @@ import * as R from 'ramda';
   providedIn: 'root'
 })
 export class ShipService {
+
+  addMultipleShips(payload: any[]) {
+    this.ships = payload.map((x) => Ship.fromJSON(x))
+  }
   
   addShip(ship: Ship) {
     this.ships = [...this.ships, ship];

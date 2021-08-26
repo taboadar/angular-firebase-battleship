@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { GameboardComponent } from './gameboard.component';
+import { CellSpanComponent } from './cell-span.component';
 
-describe('GameboardComponent', () => {
-  let component: GameboardComponent;
-  let fixture: ComponentFixture<GameboardComponent>;
+describe('CellSpanComponent', () => {
+  let component: CellSpanComponent;
+  let fixture: ComponentFixture<CellSpanComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ GameboardComponent ]
+      declarations: [ CellSpanComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(GameboardComponent);
+    fixture = TestBed.createComponent(CellSpanComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

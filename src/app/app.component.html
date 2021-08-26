@@ -4,9 +4,13 @@
 
 <div class="application">
     <app-login></app-login>
-    <ng-template #gameboard>
-        <div class="gameboard">
-
-        </div>
-    </ng-template>
+</div>
+<br>
+<div class="" *ngIf="auth.user | async as user">
+    <div class="application" *ngIf="gameStatus$ | async as status">
+        <app-gameboard 
+        *ngFor="let game of status.activeGamesRefs" 
+        [game]="game"
+        [uid]="user.uid"></app-gameboard>
+    </div>
 </div>

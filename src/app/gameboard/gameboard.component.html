@@ -1,1 +1,33 @@
-<p>gameboard works!</p>
+<mat-card class="grow">
+    <mat-card-header>
+        <mat-card-title>Game #{{gameRef}}</mat-card-title>
+        <mat-card-subtitle>{{state}}</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content [ngSwitch]="state">
+        <div class="waiting-p2" *ngSwitchCase="'WAITING_FOR_PLAYER_2'">
+            <div class="">
+                <p>Invite another player</p>
+            </div>
+            <mat-spinner></mat-spinner>
+        </div>
+        <div class="select-ships" *ngSwitchCase="'WAITING_FOR_SHIPS'">
+            <app-select-ship-mesh [isVertical]="orientation" (shipsComplete)="shipsSelectedHandler($event)">
+            </app-select-ship-mesh>
+            <button mat-mini-fab (click)="orientation = !orientation">
+                <mat-icon>cached</mat-icon>
+            </button>
+        </div>
+        <div class="gameboard" *ngSwitchCase="'PLAYER_1_TURN'">
+            <div class="">
+                <p>Ship Board</p>
+                <app-ship-mesh [game]="game$ | async" [uid]="userUid"></app-ship-mesh>
+            </div>
+            <div class="">
+                <p>Shot Board</p>
+                <app-shot-mesh [game]="game$ | async" [uid]="userUid" (onShot)="updateShotInfo($event)"></app-shot-mesh>
+            </div>
+        </div>
+        <div class="play" *ngSwitchCase="'GAME_ACTIVE'">
+        </div>
+    </mat-card-content>
+</mat-card>
