@@ -55,6 +55,9 @@
     "ui": {
       "enabled": true,
       "port": 7878
+    },
+    "storage": {
+      "port": 9199
     }
   },
   "firestore": {
