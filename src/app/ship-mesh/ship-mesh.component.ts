@@ -47,7 +47,7 @@ export class ShipMeshComponent implements OnInit, AfterViewInit, OnChanges {
 
   ngClassHandler(x: number, y:number) {
     const cellInShip = R.any(s => s.containCell(x,y), this.ships)
-    const cellWithShot = R.any(R.equals([x,y]), this.shots);
+    const cellWithShot = R.any(R.equals([x,y]), this.shots || []);
     return {
       selected: cellInShip && !cellWithShot,
       error: cellInShip && cellWithShot,

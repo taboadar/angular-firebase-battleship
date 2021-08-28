@@ -17,7 +17,7 @@
                 <mat-icon>cached</mat-icon>
             </button>
         </div>
-        <div class="gameboard" *ngSwitchCase="'PLAYER_1_TURN'">
+        <div class="gameboard" *ngSwitchCase="['PLAYER_1_TURN', 'PLAYER_2_TURN'].includes(state) ? state : ''">
             <div class="">
                 <p>Ship Board</p>
                 <app-ship-mesh [game]="game$ | async" [uid]="userUid"></app-ship-mesh>

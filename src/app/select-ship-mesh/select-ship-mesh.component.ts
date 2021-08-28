@@ -26,6 +26,7 @@ export class SelectShipMeshComponent implements  OnChanges, AfterViewInit {
   ) { }
 
   ngOnChanges(changes: SimpleChanges): void {
+    if(!this.mesh) { return;}
     this.mesh.ngClassHandler = this.ngClassHandler.bind(this);
   }
 

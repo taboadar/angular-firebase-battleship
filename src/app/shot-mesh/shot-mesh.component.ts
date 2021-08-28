@@ -30,20 +30,30 @@ export class ShotMeshComponent implements OnChanges {
     this.ships = R.prop(oponent, this.game).map((s:any) => Ship.fromJSON(s));
     this.mesh.clickHandler = this.clickHandler.bind(this);
     this.mesh.ngClassHandler   = this.ngClassHandler.bind(this);
+    this.mesh.showText = this.showText.bind(this);
   }
 
   clickHandler(x: number, y: number) {
     this.onShot.emit([x,y]);
   }
 
+  showText(x: number, y: number) {
+    let text = `${x},${y}`;
+    const filterShips = R.filter( ship => ship.containCell(x,y) , this.ships);
+    if(!R.isEmpty(filterShips)) {
+      const ship = R.head(filterShips);
+      const isShipDestroyed = R.isEmpty(R.difference(ship?.getBody() || [], this.shots));
+      text = isShipDestroyed ? ship?.name.charAt(0) || '' : text;
+    }
+    return text;
+  }
+
   ngClassHandler(x: number, y:number) {
     const cellInShip = R.any(s => s.containCell(x,y), this.ships)
-    const cellWithShot = R.any(R.equals([x,y]), this.shots);
+    const cellWithShot = R.any(R.equals([x,y]), this.shots || []);
     return {
       error: cellWithShot && !cellInShip,
-      selected: cellWithShot && cellInShip
-      // error: cellInShip && !cellWithShot,
-      // selected: cellInShip && cellWithShot,
+      selected: cellWithShot && cellInShip,
     }
   }
 }

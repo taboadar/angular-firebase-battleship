@@ -2,8 +2,27 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
+    match /users/{userId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    match /games/{gameId} {
+      function sendShips() {
+        return resource.data.state == 'WAITING_FOR_SHIPS' && request.auth.uid in resource.data.players;
+      }
+
+      function update_if_is_your_turn(uid) {
+        return (
+          (uid == resource.data.p1 && resource.data.state == 'PLAYER_1_TURN') || 
+          (uid == resource.data.p2 && resource.data.state == 'PLAYER_2_TURN')
+        );
+      }
+      allow read: if request.auth != null;
+      allow update: if sendShips() || update_if_is_your_turn(request.auth.uid) 
+    }
     match /{document=**} {
-      allow read, write: if request.auth != null;
+      allow read, write: if false;
     }
   }
 }

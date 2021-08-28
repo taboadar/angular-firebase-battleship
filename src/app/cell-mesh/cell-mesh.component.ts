@@ -35,8 +35,8 @@ import * as R from 'ramda';
   }
   .selected { background: lightgreen};
   .error { background: lightcoral};
-  .ship { background: lightgrey };
-  .missingShot { background: orange}
+  .ship { background: orange };
+  .missingShot { background: lightgrey}
   `]
 })
 export class CellMeshComponent implements OnInit {
