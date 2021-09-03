@@ -3,6 +3,11 @@
 *.bk
 *.back
 *.backup
+*.png
+*.jpg
+*.svg
+*.plantuml
+firestore-debug.log
 
 # compiled output
 /dist

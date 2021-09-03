@@ -1,0 +1,63 @@
+#+TITLE: Firebase Battleship Project
+#+AUTHOR: Ricardo Taboada Magallanes
+#+DATE: 20210903
+#+STARTUP: inlineimages
+
+* Abstract
+
+  With the goal that new members are in contact with Firebase
+  products, I made a simple game with 5 (?) Firebase Products.
+  You can watch and play on this page:
+  
+* Introduction
+
+  Firebase is such a great developing platform because
+  
+** It gave a job
+
+   Dude, this is important. It's great to have a job when
+   you don't have any capital.
+
+   I have to feed to my kittens
+
+   
+*** Kittens 
+**** Julia
+    #+ATTR_ORG: :width 600px
+    [[./julia.jpg]]
+**** Miranda
+    #+ATTR_ORG: :width 600px
+    [[./miranda.jpg]]
+**** Olivia
+    #+ATTR_ORG: :width 600ppx
+    [[./olivia.jpg]]
+   
+** Mainting apps are things that I want to avoid
+
+   Powered with Google Cloud Platform. Firebase help
+   developers in only focus in bussiness logic and
+   forget all the boilerplate.
+
+
+
+
+  
+** Awesome Products
+
+   You are already knowing why they awesome.
+   Avoiding this. ;)
+
+  
+* The Project
+  
+** Battleship
+
+   It's a simple games to seek and destroy ships.
+   Actually I don't know the complete ruleset or
+   If there are a competitive scene, but It seems cool, a
+   least for me :D
+   
+*** Why a Game?
+
+    Beside I say this is a silly game, actually it is cost me
+    a lot to implemented, but 
