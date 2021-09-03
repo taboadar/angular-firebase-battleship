@@ -5,6 +5,13 @@ const cors = require('cors')({ origin: true });
 admin.initializeApp();
 const db = admin.firestore();
 
+/**
+ * This function update a document given a callback that
+ * use the information written in this document.
+ * @param {DocumentReference} docPath Document Reference 
+ * @param {Function} lambda Function that update an document
+ * @returns Promise of a Firebase Transaction
+ */
 async function updatePlayerStatus(docPath, lambda) {
     const document = await db.doc(docPath)
     return db.runTransaction((t) => {
@@ -14,6 +21,11 @@ async function updatePlayerStatus(docPath, lambda) {
     });
 }
 
+/**
+ * Parse and obtain the token given in the authorization header
+ * @param {express.request} request 
+ * @returns admin.auth.DecodedIdToken
+ */
 async function getTokenFromHeader(request) {
     const token = request.headers.authorization.replace('Bearer ', '');
     if (!token) { throw 401 }
@@ -22,6 +34,12 @@ async function getTokenFromHeader(request) {
     return decodedToken;
 }
 
+/**
+ * The answer of the question: Is this player lose in this game?
+ * @param {DocumentReference} payload a /game document
+ * @param {DocumentReference.key | String} playerId The uid of a user
+ * @returns boolean 
+ */
 function __isPlayerDefeated(payload, playerId) {
     const opponent = R.find(player => !R.equals(playerId, player))(payload.players);
     const opponentShots = payload.shots[opponent] || [];
@@ -31,6 +49,11 @@ function __isPlayerDefeated(payload, playerId) {
 
 const isPlayerDefeated = R.curry(__isPlayerDefeated);
 
+/**
+ * Functions that answer the question: Is this game, game over?
+ * @param {DocumentData} payload The information of a game
+ * @returns boolean
+ */
 function isGameFinished(payload) {
     const p1 = payload.p1;
     const p2 = payload.p2;
@@ -58,7 +81,6 @@ exports.gameStateHandler = functions.firestore.document('games/{gameId}')
             case 'WAITING_FOR_SHIPS':
                 const ships = players.map(x => newData[x]).filter(x => x);
                 if (ships.length == 2) {
-                    console.log(ships)
                     return change.after.ref.set({
                         state: 'PLAYER_1_TURN'
                     }, { merge: true })
@@ -95,7 +117,7 @@ exports.gameStateHandler = functions.firestore.document('games/{gameId}')
                         'ties': isTie ? ties + 1 : ties,
                         'wins': isPlayer2Defeated && !isTie ? wins + 1 : wins,
                         'archivedGames': R.append(change.after.ref, archivedGames),
-                        'activeGamesRefs': R.without([change.after.ref], activeGamesRefs)
+                        'activeGamesRefs': R.without([(change.after.ref + '') .replace('/games/','')], activeGamesRefs)
                     }
                 });
 
@@ -107,7 +129,7 @@ exports.gameStateHandler = functions.firestore.document('games/{gameId}')
                         'ties': isTie ? ties + 1 : ties,
                         'wins': isPlayer1Defeated && !isTie ? wins + 1 : wins,
                         'archivedGames': R.append(change.after.ref, archivedGames),
-                        'activeGamesRefs': R.without([change.after.ref], activeGamesRefs),
+                        'activeGamesRefs': R.without([(change.after.ref + '').replace('/games/','')], activeGamesRefs),
                     }
                 });
 
@@ -137,7 +159,7 @@ exports.createGame = functions.https.onRequest((req, res) => {
             });
             await userDocRef.ref.set({
                 activeGames: userData.activeGames + 1,
-                activeGamesRefs: [...userData.activeGamesRefs, 'games/' + gameDoc.id],
+                activeGamesRefs: [...userData.activeGamesRefs, gameDoc.id],
             }, { merge: true });
             res.json({ data: { game_id: gameDoc.id } });
         } catch (error) {
@@ -168,7 +190,7 @@ exports.joinGame = functions.https.onRequest((req, res) => {
             }, { merge: true });
             userDoc.ref.set({
                 activeGames: userData.activeGames + 1,
-                activeGamesRefs: [...userData.activeGamesRefs, 'games/' + gameDoc.id]
+                activeGamesRefs: [...userData.activeGamesRefs, gameDoc.id]
             }, { merge: true })
             res.json({ data: { status: 'ok' } });
         } catch (error) {
