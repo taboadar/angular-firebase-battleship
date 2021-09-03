@@ -1,7 +1,6 @@
 #+TITLE: Firebase Battleship Project
 #+AUTHOR: Ricardo Taboada Magallanes
-#+DATE: 20210903
-#+STARTUP: inlineimages
+#+DATE: September 03, 2021
 
 * Abstract
 
@@ -18,7 +17,7 @@
    Dude, this is important. It's great to have a job when
    you don't have any capital.
 
-   I have to feed to my kittens
+   Also, I have to feed to my kittens
 
    
 *** Kittens 
@@ -29,22 +28,19 @@
     #+ATTR_ORG: :width 600px
     [[./miranda.jpg]]
 **** Olivia
-    #+ATTR_ORG: :width 600ppx
+    #+ATTR_ORG: :width 600px
     [[./olivia.jpg]]
    
-** Mainting apps are things that I want to avoid
+** Firebase maintain the things I want to avoid
 
    Powered with Google Cloud Platform. Firebase help
    developers in only focus in bussiness logic and
    forget all the boilerplate.
 
-
-
-
   
 ** Awesome Products
 
-   You are already knowing why they awesome.
+   You already know why they are awesome.
    Avoiding this. ;)
 
   
@@ -56,8 +52,168 @@
    Actually I don't know the complete ruleset or
    If there are a competitive scene, but It seems cool, a
    least for me :D
+**** Imagen
+     #+ATTR_ORG: :width 1200px :height 1200px
+     [[./init_battleship.png]]
    
 *** Why a Game?
 
-    Beside I say this is a silly game, actually it is cost me
-    a lot to implemented, but 
+    Beside I said in the last slide that this is a silly game,
+    actually it is cost me a lot to try implemented, and
+    actually it is not complete.
+***** Imagen
+
+    #+ATTR_ORG: :width 1200px :height 1200px
+    [[./init_battleship_with_notes.png]]
+
+
+**** Workflows
+
+   Many of the applications are actually a workflow with a 
+   desired happy path and with multiple exceptions 
+   that tried to recover to this mention path
+
+**** Games actually have complex workflow.
+
+   The games, although they are simple and unproductive, 
+   can contain many complex workflows and that is why 
+   I chose to implement a game. When something more complex
+   can be, more things are needed to fix it, in this case,
+   more Firebase products.
+    
+***** Imagen
+      #+ATTR_ORG: :width 1000px
+      [[./state.png]]
+      
+*** Modeling the game.
+***** State
+   You can see the slots of the representative ships of the player 
+   like his game life points, for example:
+
+****** If you know that:
+       + /Destroyer/ has *5 slots*
+       + /Battleship/ has *4 slots*
+       + /Submarine/ has *3 slots*
+
+	 Then you know that the player has *12 lifes*.
+	 The game finishes when you destroy all the ships,
+	 or equivalent, when you have *0 life points*.
+	 
+
+***** How to represent the state of the game?
+
+      In chess you have algebraic notation to know
+      the turn of the play and the move of pieces of that turn.
+
+****** How could I use that with my little game app?
+
+       I propose the next notation:
+       [\
+
+       ( x_1,y_1 ; x_2,y_2 ; target_1 ; target_2 )
+
+       \]
+
+       Where:
+
+       [\ x_i  \in { a, b, c, d, \cdots } \]
+       [\ y_i  \in { 1, 2, 3, 4, \cdots } \]
+       [\ target_i \in { D, B, S } \union { - }  = T \]
+
+      
+    
+****** Sidenote
+        Actually I couldn't implementing like this.
+	But help me in the part to implement how close the
+	game.
+
+
+*** Implementing the game with Firebase
+
+****** Auth
+
+       I used the authenticated user as valid player
+       
+******* Sidenote
+	I'm very would like implement anonymous users
+
+****** Firestore
+
+       I use it to store the game state and save the player
+       statistics (How many games winning, lose or tied?)
+       
+******* Sidenote
+	I guess it would be better using RTDB, In the end
+	I don't using many of the extras that has Firestore,
+	like the collections inside the docs. 
+
+****** Hosting
+
+       Well I already have a tk domain, so why not?
+
+       For the notice: Implemented the game using Angular
+       as frontend
+       
+******* Sidenote
+
+	In retrospective, using Angular, was not the best
+	option. It was cool using Rxjs, but was to much
+	for a simple 'click app'
+
+****** Cloud functions
+
+       Cause the game has events, for me:
+
+       Events => Cloud Functions
+       
+******* Sidenote
+
+	The use of Cloud Functions, was the best part
+	to implement.
+
+****** Architecture
+
+       #+ATTR_ORG: :width 1200px
+       [[./firebase_battleship.drawio.png]]
+       
+****** Am I missing something?
+       
+       Well just for now just imagined that 4 is 5.
+
+
+*** Project Milestones
+    
+**** Using the Cloud Function as the game referee
+
+     Using only on cloud function I easily change from one state to
+     another.
+
+     #+ATTR_ORG: :width 1200px
+     [[./function_sample.png]]
+
+**** Using security rules to block users if is not his turn 
+
+     #+ATTR_ORG: :width 1200px
+     [[./security_rules_image.png]]
+
+* Final Thoughts
+**  I want to create a "real" realtime application
+
+   One of the thing that also make me do this application.
+   It is that I really want to see changes where are two or
+   more "observers" of certain data.
+
+   This is why I very hyped that my security rules worked
+   as I want.
+
+   In this modern times, you need a very fluid application, and
+   using Firebase can help you a lot.
+
+** Observer are cool, but only for big proyects.
+
+   The Fireabase plugin of Angular uses the concept of Observables.
+   I think that for optimize is really cool, beacause you can have
+   only one lisenter per document. ~You need to clarify that~.
+   But for this simple app, it was to much :/
+   
+* Thank You Team <3 :3
