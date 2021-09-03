@@ -161,8 +161,8 @@ const createGame = app.post("/createGame", async (req, res) => {
                 }
             });
             await userDocRef.ref.set({
-                activeGames: userData.activeGames + 1,
-                activeGamesRefs: [...userData.activeGamesRefs, gameDoc.id],
+                activeGames: userData?.activeGames + 1,
+                activeGamesRefs: [...userData?.activeGamesRefs, gameDoc.id],
             }, { merge: true });
             res.json({ data: { game_id: gameDoc.id } });
         } catch (error) {
@@ -170,7 +170,7 @@ const createGame = app.post("/createGame", async (req, res) => {
         }
 });
 
-const joinGame = app.post("joinGame", async (req, res) => {
+const joinGame = app.post("/joinGame", async (req, res) => {
         res.set('Access-Control-Allow-Origin', '*');
         try {
             const { uid } = await getTokenFromHeader(req);
@@ -191,8 +191,8 @@ const joinGame = app.post("joinGame", async (req, res) => {
                 }
             }, { merge: true });
             userDoc.ref.set({
-                activeGames: userData.activeGames + 1,
-                activeGamesRefs: [...userData.activeGamesRefs, gameDoc.id]
+                activeGames: userData?.activeGames || 0 + 1,
+                activeGamesRefs: [...userData?.activeGamesRefs, gameDoc.id]
             }, { merge: true })
             res.json({ data: { status: 'ok' } });
         } catch (error) {
