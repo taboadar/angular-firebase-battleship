@@ -2,7 +2,7 @@
 #+AUTHOR: Ricardo Taboada Magallanes
 #+DATE: September 03, 2021
 
-* Abstract
+0:00:00 * Abstract
 
   With the goal that new members are in contact with Firebase
   products, I made a simple game with 5 (?) Firebase Products.
@@ -215,5 +215,21 @@
    I think that for optimize is really cool, beacause you can have
    only one lisenter per document. ~You need to clarify that~.
    But for this simple app, it was to much :/
+
+** Average Developer =/=> Analyst
+
+   I have a little of experience with Firebase, but that already
+   don't help me to much with my cases. I keep going worked hard
+   to solve this.
+
+   This lead me to another question:
    
+*** Good Analyst => Good Developer?
+
+    =This demonstration is left to the reader=
+    
+** The need to ask the team for help  
+
+   This is the most important thing I learned working with you, pals.
+ 
 * Thank You Team <3 :3
