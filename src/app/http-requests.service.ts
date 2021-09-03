@@ -18,10 +18,10 @@ export class HttpRequestsService {
     }
 
   createGame() {
-    return this.http.post(this.host + '/createGame', {data: {}}, { headers: this.headers }).toPromise();
+    return this.http.post(this.host + 'app/createGame', {data: {}}, { headers: this.headers }).toPromise();
   }
 
   joinGame(some: any) {
-    return this.http.post(this.host + '/joinGame', { data: some }, {headers: this.headers}).toPromise();
+    return this.http.post(this.host + 'app/joinGame', { data: some }, {headers: this.headers}).toPromise();
   }
 }

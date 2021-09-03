@@ -1,6 +1,7 @@
 export const environment = {
   production: true,
   useEmulators: false,
+  functionsHost: 'https://us-central1-taboada-4f230.cloudfunctions.net',
   firebaseApp: {
     apiKey: "AIzaSyAnbdXyk2yyJYgDiU9Llkg2Q7MMm4i6diw",
     authDomain: "taboada-4f230.firebaseapp.com",

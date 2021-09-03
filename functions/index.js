@@ -1,9 +1,12 @@
 const functions = require("firebase-functions");
 const admin = require('firebase-admin');
 const R = require('ramda');
+const express = require('express');
 const cors = require('cors')({ origin: true });
 admin.initializeApp();
 const db = admin.firestore();
+const app = express();
+app.use(cors);
 
 /**
  * This function update a document given a callback that
@@ -143,8 +146,8 @@ exports.gameStateHandler = functions.firestore.document('games/{gameId}')
         }
     });
 
-exports.createGame = functions.https.onRequest((req, res) => {
-    cors(req, res, async () => {
+const createGame = app.post("/createGame", async (req, res) => {
+        res.set('Access-Control-Allow-Origin', '*');
         try {
             const { uid } = await getTokenFromHeader(req);
             const userDocRef = await db.collection('users').doc(uid).get();
@@ -165,11 +168,10 @@ exports.createGame = functions.https.onRequest((req, res) => {
         } catch (error) {
             res.status(error).send({ data: error });
         }
-    })
 });
 
-exports.joinGame = functions.https.onRequest((req, res) => {
-    cors(req, res, async () => {
+const joinGame = app.post("joinGame", async (req, res) => {
+        res.set('Access-Control-Allow-Origin', '*');
         try {
             const { uid } = await getTokenFromHeader(req);
             const { gameid } = req.body.data;
@@ -196,5 +198,7 @@ exports.joinGame = functions.https.onRequest((req, res) => {
         } catch (error) {
             res.status(error).send({ data: error });
         }
-    });
 });
+
+
+exports.app = functions.https.onRequest(app);

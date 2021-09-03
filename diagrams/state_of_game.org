@@ -1,0 +1,58 @@
+#+TITLE: Firebase Battleship
+#+AUTHOR: Ricardo Taboada Magallanes
+#+STARTUP: inlineimages
+
+* Where am I?
+** Experience
+   
+* Where I go?
+  
+* What I need?
+
+* What am I implemented a game?
+** Workflows
+** Viewing all app It's a workflow
+** Happy Path of Battleship
+#+begin_src plantuml :file state.png
+  @startuml
+  WAITING_FOR_SHIPS: In this state both player can edit his ships
+  GAME_FINISHED: Temporal state where\'s is updated the players\' status
+  ARCHIVED_GAME: Lock the game document. Neither player can update the document.
+
+  state GAME {
+	  PLAYER_1_TURN: In this state only Player 1 can edit the game document.
+	  PLAYER_2_TURN: In this state only Player 2 can edit the game document.
+	  PLAYER_2_TURN --> PLAYER_1_TURN
+	  PLAYER_1_TURN --> PLAYER_2_TURN
+  }
+  note right of GAME
+	  You only get out of the GAME state
+	  When all the ships of at least one of the players
+	  are destroyed and both player has the same number
+	  \of shots. 
+  end note
+  [*] --> WAITING_FOR_SHIPS
+  WAITING_FOR_SHIPS --> PLAYER_1_TURN
+  GAME --> GAME_FINISHED
+  GAME_FINISHED --> ARCHIVED_GAME
+  ARCHIVED_GAME --> [*]
+  @enduml
+#+end_src
+
+#+RESULTS:
+[[file:state.png]]
+
+#+begin_src plantuml :file plantuml_helloworld_example.png
+  @startuml 
+  Alice -> Bob: Authentication Request
+  Bob --> Alice: Authentication Response
+
+  Alice -> Bob: Another authentication Request
+  Alice <-- Bob: Another authentication Response
+  @enduml
+#+end_src
+
+#+RESULTS:
+[[file:plantuml_helloworld_example.png]]
+** Architecture of the application
+  [[./firebase_battleship.drawio.svg]]

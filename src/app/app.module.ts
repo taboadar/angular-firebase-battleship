@@ -33,6 +33,8 @@ export function initializeApp1(afa: AngularFireAuth): any {
   };
 }
 
+console.log({useEmulators: environment.useEmulators})
+
 
 @NgModule({
   declarations: [
@@ -59,34 +61,6 @@ export function initializeApp1(afa: AngularFireAuth): any {
       provide: 'FIREBASE_FUNCTIONS_HOST',
       useValue: environment.functionsHost,
     },
-    {
-      provide: USE_FIREBASE_AUTH_EMULATOR,
-      useValue: environment.useEmulators ? ['localhost', '9099'] : null,
-    },
-    {
-      provide: USE_FIRESTORE_EMULATOR,
-      useValue: environment.useEmulators ? ['localhost', '8080'] : undefined
-    },
-    {
-      provide: USE_FIREBASE_FUNCTIONS_EMULATOR,
-      useValue: environment.useEmulators ? ['localhost', '5001'] : undefined,
-    },
-    {
-      provide: ORIGIN,
-      useFactory: () => environment.useEmulators ? 'http://localhost:5001' : undefined
-    },
-    {
-      provide: REGION,
-      useValue: 'us-central1'
-    },
-    {
-      provide: APP_INITIALIZER,
-      useFactory: initializeApp1,
-      // for some reason this dependency is necessary for this solution to work.
-      // Maybe in order to trigger the constructor *before* waiting 100ms?
-      deps: [AngularFireAuth],
-      multi: true
-    }
   ],
   bootstrap: [AppComponent]
 })
